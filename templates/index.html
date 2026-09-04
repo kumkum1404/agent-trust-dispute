@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Agent Trust & Dispute Layer</title>
+
+    <style>
+
+        /* =====================================================
+           RESET
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f4f6f9;
+            color: #111827;
+
+            overflow-x: auto;
+        }
+
+
+        /* =====================================================
+           LAYOUT
+        ===================================================== */
+
+        .app {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 220px;
+            height: 100vh;
+
+            background: #101827;
+
+            color: white;
+
+            z-index: 1000;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 18px 12px;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            padding: 2px 8px 25px;
+        }
+
+
+        .logo {
+            width: 38px;
+            height: 38px;
+
+            background: white;
+
+            color: #10213b;
+
+            border-radius: 8px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 18px;
+            font-weight: 800;
+
+            flex-shrink: 0;
+        }
+
+
+        .brand-name {
+            color: white;
+
+            font-size: 17px;
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        .brand-subtitle {
+            color: #94a3b8;
+
+            font-size: 8px;
+
+            letter-spacing: 1px;
+
+            margin-top: 4px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .nav {
+            width: 100%;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 5px;
+        }
+
+
+        .nav-item {
+            width: 100%;
+
+            min-height: 43px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 0 12px;
+
+            border-radius: 7px;
+
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+        }
+
+
+        .nav-item:hover {
+            background: #1d2939;
+            color: white;
+        }
+
+
+        .nav-item.active {
+            background: #202d3f;
+            color: white;
+        }
+
+
+        .nav-icon {
+            width: 17px;
+
+            text-align: center;
+
+            flex-shrink: 0;
+        }
+
+
+        .review-count {
+            margin-left: auto;
+
+            width: 24px;
+            height: 24px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #ef4444;
+
+            color: white;
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .main {
+            margin-left: 220px;
+
+            width: calc(100% - 220px);
+
+            min-height: 100vh;
+
+            padding: 25px;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 20px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .eyebrow {
+            color: #64748b;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            letter-spacing: 1.8px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .title {
+            font-size: 28px;
+
+            color: #111827;
+
+            font-weight: 750;
+        }
+
+
+        .live {
+            color: #16a34a;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        .live-dot {
+            display: inline-block;
+
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: #22c55e;
+
+            margin-right: 6px;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            width: 100%;
+
+            background: #101827;
+
+            color: white;
+
+            border-radius: 7px;
+
+            padding: 20px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .hero h2 {
+            font-size: 17px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .hero p {
+            color: #cbd5e1;
+
+            font-size: 10px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =====================================================
+           STATS
+        ===================================================== */
+
+        .stats {
+            width: 100%;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 12px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .stat {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 7px;
+
+            padding: 14px;
+
+            min-width: 0;
+        }
+
+
+        .stat-label {
+            color: #64748b;
+
+            font-size: 9px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .stat-value {
+            font-size: 22px;
+
+            font-weight: 750;
+
+            color: #111827;
+        }
+
+
+        .stat-small {
+            color: #94a3b8;
+
+            font-size: 8px;
+
+            margin-top: 4px;
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        .section {
+            margin-bottom: 22px;
+        }
+
+
+        .section-heading {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 10px;
+        }
+
+
+        .section-heading h3 {
+            font-size: 13px;
+
+            color: #111827;
+        }
+
+
+        .section-heading span {
+            color: #64748b;
+
+            font-size: 9px;
+        }
+
+
+        /* =====================================================
+           SCENARIOS
+        ===================================================== */
+
+        .scenario-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 12px;
+        }
+
+
+        .scenario {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 7px;
+
+            padding: 14px;
+
+            cursor: pointer;
+
+            transition: 0.15s;
+        }
+
+
+        .scenario:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.06);
+        }
+
+
+        .scenario h4 {
+            font-size: 11px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .scenario p {
+            color: #64748b;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+
+            margin-bottom: 10px;
+        }
+
+
+        .scenario button {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 8px;
+
+            color: white;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .safe button {
+            background: #15803d;
+        }
+
+
+        .suspicious button {
+            background: #d97706;
+        }
+
+
+        .adversarial button {
+            background: #dc2626;
+        }
+
+
+        /* =====================================================
+           EVALUATION
+        ===================================================== */
+
+        .evaluation-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1fr)
+                minmax(0, 1fr);
+
+            gap: 12px;
+        }
+
+
+        .card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 7px;
+
+            padding: 15px;
+
+            min-width: 0;
+
+            overflow: hidden;
+        }
+
+
+        .card-title {
+            color: #64748b;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        .decision {
+            font-size: 25px;
+
+            font-weight: 800;
+
+            margin-bottom: 5px;
+        }
+
+
+        .decision.ALLOW {
+            color: #16a34a;
+        }
+
+
+        .decision.REVIEW {
+            color: #d97706;
+        }
+
+
+        .decision.BLOCK {
+            color: #dc2626;
+        }
+
+
+        .decision-reason {
+            color: #64748b;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+
+        .risk-number {
+            font-size: 28px;
+
+            font-weight: 800;
+
+            margin-bottom: 9px;
+        }
+
+
+        .risk-bar {
+            width: 100%;
+
+            height: 6px;
+
+            background: #e5e7eb;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        .risk-fill {
+            width: 0%;
+
+            height: 100%;
+
+            background: #f97316;
+
+            transition: width 0.3s;
+        }
+
+
+        /* =====================================================
+           RISK SIGNALS
+        ===================================================== */
+
+        .signals {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 5px;
+        }
+
+
+        .signal {
+            padding: 9px 10px;
+
+            border-radius: 5px;
+
+            font-size: 9px;
+
+            border: 1px solid;
+        }
+
+
+        .signal.warning {
+            background: #fff7ed;
+
+            border-color: #fed7aa;
+
+            color: #9a3412;
+        }
+
+
+        .signal.danger {
+            background: #fef2f2;
+
+            border-color: #fecaca;
+
+            color: #991b1b;
+        }
+
+
+        .signal.success {
+            background: #f0fdf4;
+
+            border-color: #bbf7d0;
+
+            color: #166534;
+        }
+
+
+        /* =====================================================
+           REVIEW QUEUE
+        ===================================================== */
+
+        .review-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .review-item {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 6px;
+
+            padding: 11px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .review-info {
+            min-width: 0;
+        }
+
+
+        .review-info strong {
+            display: block;
+
+            font-size: 10px;
+
+            margin-bottom: 3px;
+        }
+
+
+        .review-info span {
+            color: #64748b;
+
+            font-size: 8px;
+        }
+
+
+        .review-actions {
+            display: flex;
+
+            gap: 5px;
+
+            flex-shrink: 0;
+        }
+
+
+        .btn {
+            border: none;
+
+            border-radius: 5px;
+
+            padding: 7px 10px;
+
+            font-size: 8px;
+
+            font-weight: 700;
+
+            color: white;
+
+            cursor: pointer;
+        }
+
+
+        .approve {
+            background: #16a34a;
+        }
+
+
+        .reject {
+            background: #dc2626;
+        }
+
+
+        /* =====================================================
+           JSON / EVIDENCE
+        ===================================================== */
+
+        .json-box {
+            width: 100%;
+
+            background: #f8fafc;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 6px;
+
+            padding: 12px;
+
+            font-family:
+                Consolas,
+                "Courier New",
+                monospace;
+
+            font-size: 8px;
+
+            line-height: 1.5;
+
+            white-space: pre-wrap;
+
+            word-break: break-word;
+
+            overflow-x: auto;
+
+            max-height: 500px;
+
+            overflow-y: auto;
+        }
+
+
+        /* =====================================================
+           PAYMENT
+        ===================================================== */
+
+        .payment-box {
+            margin-top: 12px;
+
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 7px;
+
+            padding: 15px;
+        }
+
+
+        .payment-status {
+            font-size: 11px;
+
+            font-weight: 700;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .empty {
+            background: white;
+
+            border: 1px dashed #d1d5db;
+
+            border-radius: 7px;
+
+            padding: 18px;
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 9px;
+        }
+
+
+        /* =====================================================
+           ERROR
+        ===================================================== */
+
+        .error-box {
+            display: none;
+
+            background: #fef2f2;
+
+            color: #991b1b;
+
+            border: 1px solid #fecaca;
+
+            border-radius: 7px;
+
+            padding: 12px;
+
+            margin-bottom: 15px;
+
+            font-size: 10px;
+
+            white-space: pre-wrap;
+
+            word-break: break-word;
+        }
+
+
+        .error-box.show {
+            display: block;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+           SIDEBAR NEVER MOVES TO TOP
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+
+                width: calc(100% - 200px);
+
+                padding: 18px;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .scenario-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 170px;
+
+                padding: 15px 8px;
+            }
+
+            .main {
+                margin-left: 170px;
+
+                width: calc(100% - 170px);
+
+                padding: 12px;
+            }
+
+            .brand-name {
+                font-size: 14px;
+            }
+
+            .brand-subtitle {
+                font-size: 7px;
+            }
+
+            .nav-item {
+                font-size: 10px;
+
+                padding: 0 7px;
+            }
+
+            .scenario-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .evaluation-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .sidebar {
+                width: 145px;
+            }
+
+            .main {
+                margin-left: 145px;
+
+                width: calc(100% - 145px);
+
+                padding: 9px;
+            }
+
+            .logo {
+                width: 32px;
+                height: 32px;
+            }
+
+            .brand-name {
+                font-size: 12px;
+            }
+
+            .nav-item {
+                font-size: 9px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo-area">
+
+            <div class="logo">
+                AT
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    Agent Trust
+                </div>
+
+                <div class="brand-subtitle">
+                    SECURITY ENGINE
+                </div>
+            </div>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <a
+                href="#dashboard"
+                class="nav-item active"
+            >
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+            </a>
+
+
+            <a
+                href="#evaluation"
+                class="nav-item"
+            >
+                <span class="nav-icon">↔</span>
+                <span>Transactions</span>
+            </a>
+
+
+            <a
+                href="#review"
+                class="nav-item"
+            >
+                <span class="nav-icon">⚠</span>
+                <span>Review Queue</span>
+
+                <span
+                    class="review-count"
+                    id="reviewCount"
+                >
+                    0
+                </span>
+
+            </a>
+
+
+            <a
+                href="#evidence"
+                class="nav-item"
+            >
+                <span class="nav-icon">▤</span>
+                <span>Evidence</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- HEADER -->
+
+        <div
+            class="header"
+            id="dashboard"
+        >
+
+            <div>
+
+                <div class="eyebrow">
+                    AGENT TRUST & DISPUTE
+                </div>
+
+                <h1 class="title">
+                    Transaction Control Center
+                </h1>
+
+            </div>
+
+
+            <div class="live">
+
+                <span class="live-dot"></span>
+
+                LIVE
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ERROR -->
+
+        <div
+            class="error-box"
+            id="errorBox"
+        ></div>
+
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <h2>
+                Protect every transaction before payment happens.
+            </h2>
+
+            <p>
+                Verify agent authorization, detect anomalous behavior,
+                enforce user intent and prevent unauthorized payments.
+            </p>
+
+        </section>
+
+
+
+        <!-- STATS -->
+
+        <section class="stats">
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    TRANSACTIONS EVALUATED
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalTransactions"
+                >
+                    0
+                </div>
+
+                <div class="stat-small">
+                    Total evaluations
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    ALLOWED
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="allowedTransactions"
+                >
+                    0
+                </div>
+
+                <div class="stat-small">
+                    Safe transactions
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    REVIEWS
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="reviewTransactions"
+                >
+                    0
+                </div>
+
+                <div class="stat-small">
+                    Human review
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    BLOCKED
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="blockedTransactions"
+                >
+                    0
+                </div>
+
+                <div class="stat-small">
+                    Prevented transactions
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SCENARIOS
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h3>
+                        Test Transaction Scenarios
+                    </h3>
+
+                    <span>
+                        Click a scenario to evaluate it
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="scenario-grid">
+
+
+                <!-- SAFE -->
+
+                <div
+                    class="scenario safe"
+                    onclick="runScenario('safe')"
+                >
+
+                    <h4>
+                        🟢 Safe Transaction
+                    </h4>
+
+                    <p>
+                        Valid mandate, normal price and normal
+                        agent behavior.
+                    </p>
+
+                    <button>
+                        Evaluate Safe
+                    </button>
+
+                </div>
+
+
+
+                <!-- SUSPICIOUS -->
+
+                <div
+                    class="scenario suspicious"
+                    onclick="runScenario('suspicious')"
+                >
+
+                    <h4>
+                        🟠 Suspicious Transaction
+                    </h4>
+
+                    <p>
+                        Elevated purchase velocity and abnormal
+                        agent behavior.
+                    </p>
+
+                    <button>
+                        Evaluate Suspicious
+                    </button>
+
+                </div>
+
+
+
+                <!-- ADVERSARIAL -->
+
+                <div
+                    class="scenario adversarial"
+                    onclick="runScenario('adversarial')"
+                >
+
+                    <h4>
+                        🔴 Adversarial Transaction
+                    </h4>
+
+                    <p>
+                        Mandate violation and unauthorized
+                        transaction attempt.
+                    </p>
+
+                    <button>
+                        Evaluate Adversarial
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CURRENT EVALUATION
+        ================================================== -->
+
+        <section
+            class="section"
+            id="evaluation"
+        >
+
+            <div class="section-heading">
+
+                <h3>
+                    Current Evaluation
+                </h3>
+
+                <span id="currentTransaction">
+                    No transaction evaluated
+                </span>
+
+            </div>
+
+
+            <div class="evaluation-grid">
+
+
+                <!-- DECISION -->
+
+                <div class="card">
+
+                    <div class="card-title">
+                        FINAL DECISION
+                    </div>
+
+                    <div
+                        class="decision"
+                        id="decision"
+                    >
+                        -
+                    </div>
+
+                    <div
+                        class="decision-reason"
+                        id="decisionReason"
+                    >
+                        Run a transaction scenario to see the decision.
+                    </div>
+
+                </div>
+
+
+
+                <!-- RISK -->
+
+                <div class="card">
+
+                    <div class="card-title">
+                        RISK SCORE
+                    </div>
+
+                    <div
+                        class="risk-number"
+                        id="riskScore"
+                    >
+                        0.00
+                    </div>
+
+                    <div class="risk-bar">
+
+                        <div
+                            class="risk-fill"
+                            id="riskFill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RISK SIGNALS
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <h3>
+                    Risk Signals
+                </h3>
+
+                <span>
+                    Security analysis
+                </span>
+
+            </div>
+
+
+            <div
+                class="signals"
+                id="riskSignals"
+            >
+
+                <div class="empty">
+                    No risk signals yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             PAYMENT
+        ================================================== -->
+
+        <section class="section">
+
+            <div class="section-heading">
+
+                <h3>
+                    Payment Gateway
+                </h3>
+
+            </div>
+
+
+            <div class="payment-box">
+
+                <div
+                    class="payment-status"
+                    id="paymentStatus"
+                >
+                    No payment attempted.
+                </div>
+
+
+                <pre
+                    class="json-box"
+                    id="paymentData"
+                >{}</pre>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             REVIEW QUEUE
+        ================================================== -->
+
+        <section
+            class="section"
+            id="review"
+        >
+
+            <div class="section-heading">
+
+                <h3>
+                    Review Queue
+                </h3>
+
+                <span>
+                    Human approval required
+                </span>
+
+            </div>
+
+
+            <div
+                class="review-list"
+                id="reviewList"
+            >
+
+                <div class="empty">
+                    No transactions waiting for review.
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             EVIDENCE
+        ================================================== -->
+
+        <section
+            class="section"
+            id="evidence"
+        >
+
+            <div class="section-heading">
+
+                <h3>
+                    Audit Evidence
+                </h3>
+
+                <span>
+                    Machine-readable evidence packet
+                </span>
+
+            </div>
+
+
+            <pre
+                class="json-box"
+                id="evidenceData"
+            >{}</pre>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+    /* =====================================================
+       STATE
+    ===================================================== */
+
+    let totalTransactions = 0;
+    let allowedTransactions = 0;
+    let reviewTransactions = 0;
+    let blockedTransactions = 0;
+
+
+    /* =====================================================
+       SHOW ERROR
+    ===================================================== */
+
+    function showError(message) {
+
+        const box =
+            document.getElementById("errorBox");
+
+        box.textContent = message;
+
+        box.classList.add("show");
+
+    }
+
+
+    function hideError() {
+
+        const box =
+            document.getElementById("errorBox");
+
+        box.textContent = "";
+
+        box.classList.remove("show");
+
+    }
+
+
+    /* =====================================================
+       SAFE JSON RESPONSE
+    ===================================================== */
+
+    async function getResponseData(response) {
+
+        const text =
+            await response.text();
+
+        if (!text) {
+
+            throw new Error(
+                "Backend returned an empty response."
+            );
+
+        }
+
+
+        try {
+
+            return JSON.parse(text);
+
+        } catch (error) {
+
+            console.error(
+                "Raw backend response:",
+                text
+            );
+
+            throw new Error(
+                "Backend returned an error instead of JSON:\n\n"
+                + text
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE STATS
+    ===================================================== */
+
+    function updateStats() {
+
+        document.getElementById(
+            "totalTransactions"
+        ).textContent =
+            totalTransactions;
+
+
+        document.getElementById(
+            "allowedTransactions"
+        ).textContent =
+            allowedTransactions;
+
+
+        document.getElementById(
+            "reviewTransactions"
+        ).textContent =
+            reviewTransactions;
+
+
+        document.getElementById(
+            "blockedTransactions"
+        ).textContent =
+            blockedTransactions;
+
+    }
+
+
+    /* =====================================================
+       SCENARIO DATA
+    ===================================================== */
+
+    function getScenarioData(type) {
+
+
+        /*
+         * IMPORTANT:
+         *
+         * These fields must exist in your Pydantic
+         * Transaction schema.
+         *
+         * If your schema does not contain purchase_velocity
+         * and agent_behavior_score, backend must be updated.
+         */
+
+
+        const baseMandate = {
+    agent_id: "agent_demo_001",
+    user_id: "user_demo_001",
+
+    max_spending: 50000,
+
+    allowed_categories: [
+        "electronics",
+        "software",
+        "books"
+    ],
+
+    allowed_merchants: [
+        "merchant_demo_001"
+    ],
+
+    requested_category: "electronics",
+
+    requested_max_price: 50000,
+
+    currency: "INR",
+
+    active: true,
+
+    expires_at: null
+};
+
+        const baseTransaction = {
+
+    transaction_id:
+        "txn_" + Date.now(),
+
+    agent_id:
+        "agent_demo_001",
+
+    user_id:
+        "user_demo_001",
+
+    product_name:
+        "Laptop",
+
+    category:
+        "electronics",
+
+    merchant_id:
+        "merchant_demo_001",
+
+    amount:
+        42000,
+
+    currency:
+        "INR",
+
+    requested_category:
+        "electronics",
+
+    requested_max_price:
+        50000,
+
+    purchase_velocity:
+        1,
+
+    agent_behavior_score:
+        0.05
+};
+
+        /* SAFE */
+
+        if (type === "safe") {
+
+            return {
+
+                mandate: baseMandate,
+
+                transaction: baseTransaction
+
+            };
+
+        }
+
+
+        /* SUSPICIOUS */
+
+        if (type === "suspicious") {
+
+            return {
+
+                mandate: baseMandate,
+
+                transaction: {
+
+                    ...baseTransaction,
+
+                    transaction_id:
+                        "txn_suspicious_" + Date.now(),
+
+                    amount:
+                        47000,
+
+                    purchase_velocity:
+                        6,
+
+                    agent_behavior_score:
+                        0.75
+
+                }
+
+            };
+
+        }
+
+
+        /* ADVERSARIAL */
+
+        return {
+
+            mandate: {
+
+                ...baseMandate,
+
+                max_spending:
+                    20000,
+
+                allowed_categories: [
+                    "books"
+                ]
+
+            },
+
+            transaction: {
+
+                ...baseTransaction,
+
+                transaction_id:
+                    "txn_adversarial_" + Date.now(),
+
+                category:
+                    "electronics",
+
+                amount:
+                    42000,
+
+                purchase_velocity:
+                    8,
+
+                agent_behavior_score:
+                    0.95
+
+            }
+
+        };
+
+    }
+
+
+    /* =====================================================
+       RUN SCENARIO
+    ===================================================== */
+
+    async function runScenario(type) {
+
+        hideError();
+
+        console.log(
+            "Running scenario:",
+            type
+        );
+
+
+        const scenario =
+            getScenarioData(type);
+
+
+        console.log(
+            "Request payload:",
+            scenario
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/evaluate",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                scenario
+                            )
+
+                    }
+                );
+
+
+            const data =
+                await getResponseData(
+                    response
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    data.message ||
+                    "Transaction evaluation failed."
+                );
+
+            }
+
+
+            console.log(
+                "Evaluation response:",
+                data
+            );
+
+
+            totalTransactions++;
+
+
+            const action =
+                data
+                    ?.security_layer
+                    ?.final_decision
+                    ?.action;
+
+
+            if (action === "ALLOW") {
+
+                allowedTransactions++;
+
+            }
+
+            else if (action === "REVIEW") {
+
+                reviewTransactions++;
+
+            }
+
+            else if (action === "BLOCK") {
+
+                blockedTransactions++;
+
+            }
+
+
+            updateStats();
+
+
+            renderEvaluation(data);
+
+
+            await loadReviews();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Evaluation error:",
+                error
+            );
+
+
+            showError(
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RENDER EVALUATION
+    ===================================================== */
+
+    function renderEvaluation(data) {
+
+
+        const security =
+            data.security_layer || {};
+
+
+        const decision =
+            security.final_decision || {};
+
+
+        const risk =
+            security.risk_analysis || {};
+
+
+        const action =
+            decision.action || "-";
+
+
+        const score =
+            Number(
+                risk.risk_score || 0
+            );
+
+
+        /* Decision */
+
+        const decisionElement =
+            document.getElementById(
+                "decision"
+            );
+
+
+        decisionElement.textContent =
+            action;
+
+
+        decisionElement.className =
+            "decision " + action;
+
+
+        document.getElementById(
+            "decisionReason"
+        ).textContent =
+            decision.reason ||
+            "No decision reason available.";
+
+
+        /* Transaction ID */
+
+        document.getElementById(
+            "currentTransaction"
+        ).textContent =
+            data.transaction_id ||
+            "Transaction evaluated";
+
+
+        /* Risk score */
+
+        document.getElementById(
+            "riskScore"
+        ).textContent =
+            score.toFixed(2);
+
+
+        document.getElementById(
+            "riskFill"
+        ).style.width =
+            Math.min(
+                score * 100,
+                100
+            ) + "%";
+
+
+        /* Risk signals */
+
+        renderRiskSignals(
+            risk
+        );
+
+
+        /* Payment */
+
+        const payment =
+            data.payment || {};
+
+
+        document.getElementById(
+            "paymentStatus"
+        ).textContent =
+            payment.status ||
+            "No payment status.";
+
+
+        document.getElementById(
+            "paymentData"
+        ).textContent =
+            JSON.stringify(
+                payment,
+                null,
+                2
+            );
+
+
+        /* Evidence */
+
+        const evidence =
+            data.evidence || {};
+
+
+        document.getElementById(
+            "evidenceData"
+        ).textContent =
+            JSON.stringify(
+                evidence,
+                null,
+                2
+            );
+
+    }
+
+
+    /* =====================================================
+       RENDER RISK SIGNALS
+    ===================================================== */
+
+    function renderRiskSignals(risk) {
+
+        const container =
+            document.getElementById(
+                "riskSignals"
+            );
+
+
+        container.innerHTML = "";
+
+
+        const reasons =
+            risk.risk_reasons || [];
+
+
+        if (
+            !Array.isArray(reasons)
+            ||
+            reasons.length === 0
+        ) {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "signal success";
+
+            item.textContent =
+                "No significant risk signals detected.";
+
+            container.appendChild(
+                item
+            );
+
+            return;
+
+        }
+
+
+        reasons.forEach(
+            function(reason) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "signal danger";
+
+
+                item.textContent =
+                    "⚠ " + reason;
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD REVIEWS
+    ===================================================== */
+
+    async function loadReviews() {
+    try {
+        const response = await fetch("/api/reviews");
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail || "Could not load review queue."
+            );
+        }
+
+        // ONLY pending reviews should appear in Review Queue
+        const pendingReviews = (data.reviews || []).filter(
+            review => review.status === "PENDING_REVIEW"
+        );
+
+        renderReviews(pendingReviews);
+
+    } catch (error) {
+        console.error("Review loading error:", error);
+        showError(error.message);
+    }
+}
+
+
+    /* =====================================================
+       RENDER REVIEWS
+    ===================================================== */
+
+    function renderReviews(reviews) {
+
+        const container =
+            document.getElementById(
+                "reviewList"
+            );
+
+
+        const count =
+            document.getElementById(
+                "reviewCount"
+            );
+
+
+        count.textContent =
+            reviews.length;
+
+
+        container.innerHTML = "";
+
+
+        if (
+            !reviews ||
+            reviews.length === 0
+        ) {
+
+            container.innerHTML = `
+                <div class="empty">
+                    No transactions waiting for review.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        reviews.forEach(
+            function(review) {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                item.className =
+                    "review-item";
+
+
+                const info =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                info.className =
+                    "review-info";
+
+
+                info.innerHTML = `
+
+                    <strong>
+                        ${escapeHtml(
+                            review.product_name ||
+                            "Transaction"
+                        )}
+                    </strong>
+
+                    <span>
+                        ${escapeHtml(
+                            review.transaction_id ||
+                            ""
+                        )}
+                        · Risk:
+                        ${Number(
+                            review.risk_score || 0
+                        ).toFixed(2)}
+                    </span>
+
+                `;
+
+
+                const actions =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                actions.className =
+                    "review-actions";
+
+
+                const approve =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                approve.className =
+                    "btn approve";
+
+
+                approve.textContent =
+                    "Approve";
+
+
+                approve.onclick =
+                    function() {
+
+                        approveReview(
+                            review.transaction_id
+                        );
+
+                    };
+
+
+                const reject =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                reject.className =
+                    "btn reject";
+
+
+                reject.textContent =
+                    "Reject";
+
+
+                reject.onclick =
+                    function() {
+
+                        rejectReview(
+                            review.transaction_id
+                        );
+
+                    };
+
+
+                actions.appendChild(
+                    approve
+                );
+
+
+                actions.appendChild(
+                    reject
+                );
+
+
+                item.appendChild(
+                    info
+                );
+
+
+                item.appendChild(
+                    actions
+                );
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       APPROVE REVIEW
+    ===================================================== */
+
+    async function approveReview(
+        transactionId
+    ) {
+
+        hideError();
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/reviews/"
+                    +
+                    encodeURIComponent(
+                        transactionId
+                    )
+                    +
+                    "/approve",
+                    {
+
+                        method: "POST"
+
+                    }
+                );
+
+
+            const data =
+                await getResponseData(
+                    response
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    "Approval failed."
+                );
+
+            }
+
+
+            alert(
+                "Transaction approved successfully."
+            );
+
+
+            await loadReviews();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+            showError(
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       REJECT REVIEW
+    ===================================================== */
+
+    async function rejectReview(
+        transactionId
+    ) {
+
+        hideError();
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/reviews/"
+                    +
+                    encodeURIComponent(
+                        transactionId
+                    )
+                    +
+                    "/reject",
+                    {
+
+                        method: "POST"
+
+                    }
+                );
+
+
+            const data =
+                await getResponseData(
+                    response
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.detail ||
+                    "Rejection failed."
+                );
+
+            }
+
+
+            alert(
+                "Transaction rejected successfully."
+            );
+
+
+            await loadReviews();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                error
+            );
+
+            showError(
+                error.message
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       HTML ESCAPE
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            loadReviews();
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+{
+    "evidence_id": "EVD-txn_adversarial_1788532655184",
+    "generated_at": "2026-09-04T14:37:38.435517+00:00",
+    "agent": {
+        "agent_id": "agent_demo_001"
+    },
+    "mandate": {
+        "max_spending": 20000.0,
+        "allowed_categories": [
+            "books"
+        ],
+        "allowed_merchants": [
+            "merchant_demo_001"
+        ],
+        "expires_at": null
+    },
+    "transaction": {
+        "transaction_id": "txn_adversarial_1788532655184",
+        "product_name": "Laptop",
+        "category": "electronics",
+        "merchant_id": "merchant_demo_001",
+        "amount": 42000.0,
+        "currency": "INR",
+        "timestamp": null,
+        "user_intent": null
+    },
+    "verification": {
+        "valid": false,
+        "violations": [
+            "Spending limit exceeded: \u20b942000.00 > \u20b920000.00",
+            "Category 'electronics' is not allowed"
+        ]
+    },
+    "risk_analysis": {
+        "risk_score": 0.912,
+        "risk_reasons": [
+            "Spending limit exceeded: \u20b942000.00 > \u20b920000.00",
+            "Category 'electronics' is not allowed",
+            "Unusually high purchase velocity",
+            "Agent behavior score is unusually high"
+        ]
+    },
+    "decision": {
+        "action": "BLOCK"
+    }
+}

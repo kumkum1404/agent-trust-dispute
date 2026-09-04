@@ -1,0 +1,47 @@
+{
+    "evidence_id": "EVD-txn_adversarial_1788463861547",
+    "generated_at": "2026-09-03T19:31:01.439755",
+    "agent": {
+        "agent_id": "agent_attacker_01"
+    },
+    "mandate": {
+        "max_spending": 50000.0,
+        "allowed_categories": [
+            "laptop"
+        ],
+        "allowed_merchants": [
+            "merchant_001"
+        ],
+        "expires_at": "2026-12-31 23:59:59"
+    },
+    "transaction": {
+        "transaction_id": "txn_adversarial_1788463861547",
+        "product_name": "Gaming Phone",
+        "category": "mobile",
+        "merchant_id": "merchant_999",
+        "amount": 90000.0,
+        "timestamp": "2026-09-03 19:30:13.984000+00:00",
+        "user_intent": null
+    },
+    "verification": {
+        "valid": false,
+        "violations": [
+            "Spending limit exceeded: \u20b990000.00 > \u20b950000.00",
+            "Category 'mobile' is not allowed",
+            "Merchant 'merchant_999' is not allowed"
+        ]
+    },
+    "risk_analysis": {
+        "risk_score": 0.944,
+        "risk_reasons": [
+            "Spending limit exceeded: \u20b990000.00 > \u20b950000.00",
+            "Category 'mobile' is not allowed",
+            "Merchant 'merchant_999' is not allowed",
+            "High price anomaly: transaction price is 80.0% above catalog median",
+            "Transaction deviates from user intent"
+        ]
+    },
+    "decision": {
+        "action": "BLOCK"
+    }
+}

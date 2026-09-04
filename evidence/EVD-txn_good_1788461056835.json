@@ -1,0 +1,38 @@
+{
+    "evidence_id": "EVD-txn_good_1788461056835",
+    "generated_at": "2026-09-03T18:44:18.028236",
+    "agent": {
+        "agent_id": "agent_good_01"
+    },
+    "mandate": {
+        "max_spending": 50000.0,
+        "allowed_categories": [
+            "laptop"
+        ],
+        "allowed_merchants": [
+            "merchant_001",
+            "merchant_002"
+        ],
+        "expires_at": "2026-12-31 23:59:59"
+    },
+    "transaction": {
+        "transaction_id": "txn_good_1788461056835",
+        "product_name": "HP Laptop",
+        "category": "laptop",
+        "merchant_id": "merchant_001",
+        "amount": 42000.0,
+        "timestamp": "2026-09-03 18:44:16.835000+00:00",
+        "user_intent": null
+    },
+    "verification": {
+        "valid": true,
+        "violations": []
+    },
+    "risk_analysis": {
+        "risk_score": 0.02,
+        "risk_reasons": []
+    },
+    "decision": {
+        "action": "ALLOW"
+    }
+}

@@ -1,0 +1,13 @@
+product_name,category,merchant_id,price
+HP Laptop,laptop,merchant_001,42000
+HP Laptop,laptop,merchant_002,44000
+HP Laptop,laptop,merchant_003,45000
+Dell Laptop,laptop,merchant_001,46000
+Dell Laptop,laptop,merchant_002,48000
+Lenovo Laptop,laptop,merchant_001,43000
+Lenovo Laptop,laptop,merchant_002,45000
+MacBook,laptop,merchant_001,85000
+MacBook,laptop,merchant_002,88000
+Gaming Chair,gaming_chair,merchant_001,18000
+Gaming Chair,gaming_chair,merchant_002,19500
+Gaming Chair,gaming_chair,merchant_003,20000

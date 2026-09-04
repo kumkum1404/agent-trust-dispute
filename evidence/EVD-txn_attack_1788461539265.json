@@ -1,0 +1,46 @@
+{
+    "evidence_id": "EVD-txn_attack_1788461539265",
+    "generated_at": "2026-09-03T18:52:19.787867",
+    "agent": {
+        "agent_id": "agent_bad_01"
+    },
+    "mandate": {
+        "max_spending": 50000.0,
+        "allowed_categories": [
+            "laptop"
+        ],
+        "allowed_merchants": [
+            "merchant_001"
+        ],
+        "expires_at": "2026-12-31 23:59:59"
+    },
+    "transaction": {
+        "transaction_id": "txn_attack_1788461539265",
+        "product_name": "Luxury Jewelry",
+        "category": "jewelry",
+        "merchant_id": "unknown_merchant",
+        "amount": 95000.0,
+        "timestamp": "2026-09-03 18:52:19.265000+00:00",
+        "user_intent": null
+    },
+    "verification": {
+        "valid": false,
+        "violations": [
+            "Spending limit exceeded: \u20b995000.00 > \u20b950000.00",
+            "Category 'jewelry' is not allowed",
+            "Merchant 'unknown_merchant' is not allowed"
+        ]
+    },
+    "risk_analysis": {
+        "risk_score": 0.8558,
+        "risk_reasons": [
+            "Spending limit exceeded: \u20b995000.00 > \u20b950000.00",
+            "Category 'jewelry' is not allowed",
+            "Merchant 'unknown_merchant' is not allowed",
+            "Price is 63.8% above catalog median"
+        ]
+    },
+    "decision": {
+        "action": "BLOCK"
+    }
+}

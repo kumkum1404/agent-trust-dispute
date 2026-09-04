@@ -1,0 +1,42 @@
+[
+  {
+    "transaction_id": "web_demo_1788460626819",
+    "agent_id": "agent_good_01",
+    "amount": 42000.0,
+    "category": "laptop",
+    "merchant_id": "merchant_001",
+    "timestamp": "2026-09-03T18:37:06.819000+00:00",
+    "decision": "ALLOW",
+    "risk_score": 0.02
+  },
+  {
+    "transaction_id": "web_demo_1788460629451",
+    "agent_id": "agent_good_01",
+    "amount": 42000.0,
+    "category": "laptop",
+    "merchant_id": "merchant_001",
+    "timestamp": "2026-09-03T18:37:09.451000+00:00",
+    "decision": "ALLOW",
+    "risk_score": 0.02
+  },
+  {
+    "transaction_id": "txn_good_1788460704797",
+    "agent_id": "agent_good_01",
+    "amount": 42000.0,
+    "category": "laptop",
+    "merchant_id": "merchant_001",
+    "timestamp": "2026-09-03T18:38:24.797000+00:00",
+    "decision": "ALLOW",
+    "risk_score": 0.016
+  },
+  {
+    "transaction_id": "txn_attack_1788460752782",
+    "agent_id": "agent_bad_01",
+    "amount": 95000.0,
+    "category": "jewelry",
+    "merchant_id": "unknown_merchant",
+    "timestamp": "2026-09-03T18:39:12.782000+00:00",
+    "decision": "BLOCK",
+    "risk_score": 0.336
+  }
+]
